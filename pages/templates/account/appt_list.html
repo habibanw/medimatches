@@ -1,0 +1,122 @@
+{#{% extends 'core/base.html' %}#}
+{##}
+{#{% block title %}Appointments{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#<h1>Appointment List</h1>#}
+{##}
+{#<div id="appointments">#}
+{#    <ul class="appointment-list" style="align-items: center;">#}
+{#        {% for appointment in page_obj %}#}
+{#            <li class="appointment-item" style="border: 1px solid black; text-align: center; padding: 10px; margin-bottom: 10px;">#}
+{#              <a href="{% url 'appointment-details' pk=appointment.pk %}">#}
+{#                <p><strong>Patient Name:</strong> {{ appointment.patient_user.first_name }} {{ appointment.patient_user.last_name}}</p>#}
+{#                <p><strong>Provider Name:</strong> {{ appointment.provider_user.first_name }} {{appointment.provider_user.last_name}}</p>#}
+{#                <p><strong>Start Time:</strong> {{ appointment.start_time }}</p>#}
+{#                <p><strong>Appointment Type:</strong> {{ appointment.type }}</p>#}
+{#                {% if appointment.canceled %}#}
+{#                    <p><strong>Canceled</strong></p>#}
+{#                {% endif %}#}
+{#            </a> #}
+{#            </li>#}
+{#        {% empty %}#}
+{#            <li>No appointments found.</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{##}
+{#    <div class="pagination">#}
+{#        <span class="step-links">#}
+{#            {% if page_obj.has_previous %}#}
+{#                <a href="?page=1">&laquo; first</a>#}
+{#                <a href="?page={{ page_obj.previous_page_number }}">previous</a>#}
+{#            {% endif %}#}
+{#    #}
+{#            <span class="current">#}
+{#                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.#}
+{#            </span>#}
+{#    #}
+{#            {% if page_obj.has_next %}#}
+{#                <a href="?page={{ page_obj.next_page_number }}">next</a>#}
+{#                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>#}
+{#            {% endif %}#}
+{#        </span>#}
+{#    </div>#}
+{#</div>#}
+{#{% endblock %}#}
+{% extends 'core/base.html' %}
+
+{% block title %}Appointments{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold text-center mb-6">Appointment List</h1>
+
+        <div id="appointment" class="bg-white shadow overflow-hidden sm:rounded-md">
+            <ul class="divide-y divide-gray-200">
+                {% for appointment in page_obj %}
+                <li>
+                    <a href="{% url 'appointment-details' pk=appointment.pk %}" class="block hover:bg-gray-50">
+                        <div class="px-4 py-4 sm:px-6">
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm font-medium text-indigo-600 truncate">Appointment with {{ appointment.provider_user.first_name }} {{appointment.provider_user.last_name}} {% if appointment.canceled %}<span id="canceled-bool" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Canceled</span>{% endif %}</p>
+                                <div class="ml-2 flex-shrink-0 flex">
+                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"> {{ appointment.type }} </p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">
+                                        <span>Patient: {{ appointment.patient_user.first_name }} {{ appointment.patient_user.last_name}}</span>
+                                    </p>
+                                </div>
+                                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                    <span>Start Time: {{ appointment.start_time }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {% empty %}
+                <li>No appointments found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Pagination -->
+        <div class="py-4">
+            <nav class="block">
+                <ul class="flex pl-0 rounded list-none flex-wrap justify-center">
+                    {% if page_obj.has_previous %}
+                    <li>
+                        <a href="?page=1" class="first:ml-0 text-xs font-semibold flex w-full items-center justify-center leading-tight rounded-l-full px-4 py-2 bg-white text-blue-700 border border-r-0 border-blue-700">
+                            &laquo; first
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="first:ml-0 text-xs font-semibold flex w-full items-center justify-center leading-tight px-4 py-2 bg-white text-blue-700 border border-r-0 border-blue-700">
+                            previous
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li><span class="text-xs font-semibold flex w-full items-center justify-center leading-tight px-4 py-2 bg-blue-200 text-blue-700">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span></li>
+
+                    {% if page_obj.has_next %}
+                    <li>
+                        <a href="?page={{ page_obj.next_page_number }}" class="first:ml-0 text-xs font-semibold flex w-full items-center justify-center leading-tight px-4 py-2 bg-white text-blue-700 border border-l-0 border-blue-700">
+                            next
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="first:ml-0 text-xs font-semibold flex w-full items-center justify-center leading-tight rounded-r-full px-4 py-2 bg-white text-blue-700 border border-l-0 border-blue-700">
+                            last &raquo;
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

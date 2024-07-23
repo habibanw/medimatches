@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+{% if messages %}
+<div class="max-w-4xl mx-auto px-4 py-4 bg-green-100 rounded-lg shadow">
+    <ul>
+        {% for message in messages %}
+        <li class="{% if message.tags %}{{ message.tags }}{% else %}p-2{% endif %} bg-green-200 hover:bg-green-300 rounded-md transition-colors duration-150 font-semibold">
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<div class="py-6">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="px-4 py-5 sm:p-6">
+                {% if profile %}
+                    {% if provider_details %}
+                        <h2 class="text-2xl font-bold text-teal-600 mb-4">Provider Profile: {{ profile.user.get_full_name }}</h2>
+                        <h3 class="text-xl text-teal-500 mb-2">Specialty: {{ provider_details.specialization }}</h3>
+                        <p class="text-gray-700">
+                            <strong>Address:</strong> {{ provider_details.address }}, {{ provider_details.city }}, {{ provider_details.state }} {{ provider_details.zip_code }}<br>
+                            <strong>Phone Number:</strong> {{ provider_details.phone_number }}<br>
+                            <strong>Facility Name:</strong> {{ provider_details.facility_name }}<br>
+                        </p>
+                        <div class="text-center mt-4">
+                            <a href="{% url 'provider_update' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Edit My Info
+                            </a>
+                               <a href="{% url 'messages' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    View Messages
+                            </a>
+                        <a href="{% url 'appointments' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                View Appointments
+                            </a>
+                        </a>
+                        <a href="{% url 'delete_account' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Delete My Account
+                            </a>
+                        </div>
+                    {% else %}
+                        <h2 class="text-2xl font-bold text-teal-600 mb-4">User Profile: {{ profile.user.get_full_name }}</h2>
+                        <p class="text-gray-700">{{ profile.info }}</p>
+                        <div class="text-center mt-4">
+                            <a href="{% url 'user_update' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Edit My Info
+                            </a>
+                               <a href="{% url 'messages' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    View Messages
+                            </a>
+                        <a href="{% url 'appointments' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                View Appointments
+                            </a>
+                            <a href="{% url 'delete_account' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Delete My Account
+                            </a>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p>{{ error }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

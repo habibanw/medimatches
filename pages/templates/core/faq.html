@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block title %}FAQs{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h1>
+
+    <div id="faqs" class="space-y-4">
+        <!-- FAQ Item 1 -->
+        <div class="faq-item bg-white rounded-lg shadow">
+            <h2 class="font-semibold text-lg p-4 cursor-pointer hover:bg-gray-100" onclick="toggleFaq('faq1')">What types of doctors can I find on MediMatch?</h2>
+            <p id="faq1" class="hidden p-4 text-gray-600">MediMatch offers a wide range of specialists, including General Practitioners, Pediatricians, Cardiologists, and more, catering to various health needs.</p>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="faq-item bg-white rounded-lg shadow">
+            <h2 class="font-semibold text-lg p-4 cursor-pointer hover:bg-gray-100" onclick="toggleFaq('faq2')">How do I book an appointment?</h2>
+            <p id="faq2" class="hidden p-4 text-gray-600">You can book appointments through our platform by searching for your preferred healthcare provider and selecting an available time slot.</p>
+        </div>
+
+        <!-- Additional FAQ items here -->
+        <!-- FAQ Item 3 -->
+        <div class="faq-item bg-white rounded-lg shadow">
+            <h2 class="font-semibold text-lg p-4 cursor-pointer hover:bg-gray-100" onclick="toggleFaq('faq3')">Is MediMatch free for patients?</h2>
+            <p id="faq3" class="hidden p-4 text-gray-600">Yes, MediMatch is completely free for patients. Our goal is to make healthcare accessible to everyone.</p>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="faq-item bg-white rounded-lg shadow">
+            <h2 class="font-semibold text-lg p-4 cursor-pointer hover:bg-gray-100" onclick="toggleFaq('faq4')">Can I change or cancel an appointment?</h2>
+            <p id="faq4" class="hidden p-4 text-gray-600">Absolutely! You can change or cancel appointments directly through the MediMatch platform up to 24 hours before your scheduled time.</p>
+        </div>
+
+        <!-- FAQ Item 5 -->
+        <div class="faq-item bg-white rounded-lg shadow">
+            <h2 class="font-semibold text-lg p-4 cursor-pointer hover:bg-gray-100" onclick="toggleFaq('faq5')">How do I know which doctor is right for me?</h2>
+            <p id="faq5" class="hidden p-4 text-gray-600">MediMatch provides detailed profiles for all our healthcare providers, including their specialties, experience, and patient reviews to help you make an informed decision.</p>
+        </div>
+
+        <!-- FAQ Item 6 -->
+        <div class="faq-item bg-white rounded-lg shadow">
+            <h2 class="font-semibold text-lg p-4 cursor-pointer hover:bg-gray-100" onclick="toggleFaq('faq6')">What if I need to see a specialist?</h2>
+            <p id="faq6" class="hidden p-4 text-gray-600">If your condition requires specialized care, you can search for providers by specialty on our platform. We have a wide range of specialists available to meet your needs.</p>
+        </div>
+
+        <!-- FAQ Item 7 -->
+        <div class="faq-item bg-white rounded-lg shadow">
+            <h2 class="font-semibold text-lg p-4 cursor-pointer hover:bg-gray-100" onclick="toggleFaq('faq7')">How does MediMatch protect my privacy?</h2>
+            <p id="faq7" class="hidden p-4 text-gray-600">Your privacy and security are our top priorities. MediMatch uses advanced encryption and complies with all relevant healthcare privacy laws to protect your personal information.</p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function toggleFaq(faqId) {
+    var element = document.getElementById(faqId);
+    if (element.classList.contains('hidden')) {
+        element.classList.remove('hidden');
+    } else {
+        element.classList.add('hidden');
+    }
+}
+</script>
+
+{% endblock %}

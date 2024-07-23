@@ -1,0 +1,31 @@
+{% extends 'account/format.html' %}
+{% block title %}Feedback Form{% endblock %}
+{% block content %}
+
+<div class="px-6 py-4">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h1 class="text-4xl font-bold text-center mb-8">Patient Feedback Form</h1>
+    <div class="doctor-profile bg-white rounded-lg shadow-lg p-1 text-center">
+        <h2 class="text-2xl font-semibold">Please leave your comments below:</h2>
+        <div class="px-6 py-8">
+            <form method="post" class="space-y-4 text-center">
+                {% csrf_token %}
+                {{ form }}
+                <div class="space-x-6 space-y-6">
+                <!--<input type="submit" value="Save Changes" name="save" id="id_submit">-->
+                    <button type="submit" id="id_submit" class="text-white bg-teal-500 hover:bg-teal-700 font-semibold px-4 py-2 rounded-md">Save Changes</button>
+                <!--<input type="reset" value="Cancel" name="cancel" style="border:2px solid black">-->
+                    <button type="reset" class="text-white bg-gray-500 hover:bg-gray-700 font-semibold px-4 py-2 rounded-md">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

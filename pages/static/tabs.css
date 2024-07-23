@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 1100px;
+ }
+
+ .tabs {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+ }
+
+ .tabs div {
+    padding: 5px 15px;
+    font-size: 1.2rem;
+    width: 250px;
+    border: 1px solid black;
+ }
+
+ .active {
+    background-color: grey;
+ }
+
+ .tab-content {
+    border: 1px solid black;
+    width: 800px;
+    font-size: 1rem;
+    margin-left: 10px;
+    display: flex;
+
+ }
+
+ .tab-content div {
+    display: none;
+ }
+
+#messages .pagination {
+    display: block;
+}

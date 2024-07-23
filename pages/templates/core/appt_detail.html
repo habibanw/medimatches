@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Appointment Details{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-xl mx-auto bg-white rounded-lg shadow px-6 py-8">
+        <div id="alert-container"></div> <!-- Dynamic alert container -->
+
+        {% if messages %}
+        <div class="mb-4 messages">
+            {% for message in messages %}
+            <div class="{{ message.tags }} mb-2 py-2 px-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6">Your Appointment Details</h1>
+        </div>
+
+        <div class="space-y-4">
+            <p><strong>Patient Name:</strong> {{ appointment.patient_user.first_name }} {{ appointment.patient_user.last_name}}</p>
+            <p><strong>Provider Name:</strong> {{ appointment.provider_user.first_name }} {{appointment.provider_user.last_name}}</p>
+            <p><strong>Start Time:</strong> {{ appointment.start_time }}</p>
+            <p><strong>Appointment Type:</strong> {{ appointment.type }}</p>
+            <p><strong>End Time:</strong> {{ appointment.end_time }}</p>
+            <p><strong>Appointment Status:</strong> <span id="appointment-status" class="capitalize">{{ appointment.status }}</span></p>
+            {% if appointment.canceled %}
+                <p><strong>Canceled Reason:</strong> {{ appointment.canceled_reason }}</p>
+            {% endif %}
+        </div>
+
+        {% if user.is_authenticated and user.profile.is_doctor and appointment.status == 'pending' and appointment.canceled != True %}
+        <div class="mt-6">
+            <button id="approve-button" type="button" onclick="appointmentStatusUpdate('{{ appointment.pk }}', 'approved')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">Approve</button>
+            <button id="reject-button" type="button" onclick="appointmentStatusUpdate('{{ appointment.pk }}', 'rejected')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Reject</button>
+        </div>
+        {% endif %}
+        
+        <div class="flex justify-between items-center mt-4">
+            <div class="mt-4">
+                <a href="{% url 'appointments' %}" class="text-blue-600 hover:text-blue-800">Show all appointments</a>
+            </div>
+            {% if not user.profile.is_doctor and not appointment.canceled or user.profile.is_doctor and appointment.status == 'approved' and not appointment.canceled%}
+                <div class="mt-4">
+                    <a id="cancel-link" href="javascript:void(0);" onclick="cancelAppointment('{{ appointment.pk }}')" class="text-red-600 hover:text-red-800">Cancel</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    function appointmentStatusUpdate(appointmentId, status) {
+        var formData = new FormData();
+        formData.append('status', status);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch(`/appointments/appt_detail/${appointmentId}/appointment_status`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('appointment-status').innerText = status.charAt(0).toUpperCase() + status.slice(1);
+                document.getElementById('approve-button').style.display = 'none'; // Hide buttons using display instead of visibility
+                document.getElementById('reject-button').style.display = 'none';
+                showMessage('success', 'Appointment status updated successfully.'); // Call showMessage to dynamically display success message
+            } else {
+                showMessage('error', 'Failed to update appointment status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('error', 'An error occurred while updating the status.');
+        });
+    }
+
+    function showMessage(type, message) {
+        let alertContainer = document.getElementById('alert-container');
+        let alertMessage = document.createElement('div');
+        alertMessage.classList.add('alert', type);
+        alertMessage.innerText = message;
+        alertContainer.innerHTML = ''; // Clear existing messages
+        alertContainer.appendChild(alertMessage);
+        setTimeout(() => alertContainer.removeChild(alertMessage), 5000); // Remove message after 5 seconds
+    }
+
+    function cancelAppointment(appointmentId) {
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch(`/appointments/appt_detail/${appointmentId}/cancel_appointment`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.success) {
+                document.getElementById('cancel-link').style.display = 'none';
+                showMessage('success', 'Appointment has been canceled.'); 
+            } else {
+                if (data.error_message === 'past_appointment') {
+                    showMessage('error', 'You can only cancel appointments in the future.');
+                } else {
+                showMessage('error', 'Failed to cancel appointment.');}
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('error', 'An error occurred while canceling the appointment.');
+        });
+    }
+</script>
+{% endblock %}

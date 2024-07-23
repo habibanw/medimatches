@@ -1,0 +1,70 @@
+
+{% extends 'core/base.html' %}
+{% load provider_extras %}
+{% block title %}Provider Profile{% endblock %}
+
+{% block content %}
+{% for message in messages %}
+<div class="{{ message.tags }} p-2 bg-green-100 border border-green-400 text-green-700">
+    {{ message }}
+</div>
+{% endfor %}
+<div class="max-w-4xl mx-auto px-6 py-8">
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="px-4 py-5 sm:p-6">
+            <h1 class="text-3xl font-bold text-teal-600 mb-4">{{ provider.firstName }} {{ provider.lastName }}</h1>
+            <h2 class="text-xl text-teal-500 mb-2">{{ provider.specialization }}</h2>
+            <div class="mb-4">
+                <p class="text-gray-700"><span class="font-bold">Facility Name:</span> {{ provider.facility_name }}</p>
+                <p class="text-gray-700"><span class="font-bold">Gender:</span> {{ provider.gender }}</p>
+                <p class="text-gray-700"><span class="font-bold">Phone Number:</span> {{ provider.phone_number|phone_number }}</p>
+                <p class="text-gray-700"><span class="font-bold">Address:</span> {{ provider.address }}, {{ provider.city }}, {{ provider.state }} {{ provider.zip_code }}</p>
+                <p class="text-gray-700"><em>Last updated: {{ provider.updated_at }}</em></p>
+            </div>
+            {% if user.is_authenticated and provider_has_user %}
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="{% url 'send_message' id=provider.pk%}" class="inline-block bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600 transition duration-300">Send Message</a>
+                <a href="{% url 'request_appointment' id=provider.pk%}" class="inline-block bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600 transition duration-300">Schedule Appointment</a>
+            </div>
+            {% endif %}
+
+        
+        </div>
+    </div>
+
+    {% if not request.user.profile.is_doctor and user.is_authenticated %}
+    <!-- Feedback Form -->
+    <div class="feedback-form mt-8 bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-semibold mb-4">Leave a Feedback</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% for field in feedback_form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                {% if field.errors %}
+                {% for error in field.errors %}
+                <p class="text-red-500 text-xs italic">{{ error }}</p>
+                {% endfor %}
+                {% endif %}
+                {{ field }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="inline-block bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600 transition duration-300">Submit Feedback</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- List Existing Feedback -->
+    <div class="existing-feedback mt-8 bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-semibold mb-4">Feedback</h2>
+        {% for feedback in provider.feedback_set.all %}
+        <div class="feedback mb-4 last:mb-0">
+            <p class="text-gray-600">{{ feedback.content }}</p>
+            <small class="block text-gray-500">by {{ feedback.patient_user.get_full_name }}</small>
+        </div>
+        {% empty %}
+        <p>No feedback yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

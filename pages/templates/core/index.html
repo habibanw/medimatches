@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if messages %}
+<div class="max-w-4xl mx-auto px-4 py-4 bg-blue-100 rounded-lg shadow">
+    <ul>
+        {% for message in messages %}
+        <li class="{% if message.tags %}{{ message.tags }}{% else %}p-3{% endif %} bg-blue-200 hover:bg-blue-300 rounded-md transition-colors duration-150 font-bold">
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="relative bg-cover bg-center mb-4" style="background-image: url({% static 'images/coverphoto.jpg' %}); height: 425px;">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    <div class="absolute top-1/2 left-0 right-0 -translate-y-1/2 text-center text-white">
+        <h1 class="text-5xl font-bold mb-2">Welcome to MediMatch!</h1>
+        <p class="text-xl">Connecting Patients and Healthcare Providers Seamlessly.</p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Mission -->
+        <div class="bg-gradient-to-r from-teal-500 to-teal-700 shadow-lg rounded-lg p-6 text-white">
+            <h2 class="text-3xl font-bold mb-4">Our Mission</h2>
+            <p>MediMatch aims to make finding the right healthcare provider simple, inclusive, and personalized for everyone.</p>
+        </div>
+
+        <!-- How It Works -->
+        <div class="bg-gradient-to-r from-green-500 to-green-700 shadow-lg rounded-lg p-6 text-white">
+            <h2 class="text-3xl font-bold mb-4">How It Works</h2>
+            <ul class="list-disc pl-5">
+                <li>Search for healthcare providers based on your specific needs.</li>
+                <li>Book appointments directly through our platform.</li>
+                <li>Manage your healthcare journey all in one place.</li>
+            </ul>
+        </div>
+
+        <!-- Join Us -->
+        <div class="bg-gradient-to-r from-blue-500 to-blue-700 shadow-lg rounded-lg p-6 text-white">
+            <h2 class="text-3xl font-bold mb-4">Join Us</h2>
+            <p>Are you a patient looking for a provider, or a healthcare provider wanting to reach more patients? Sign up today.</p>
+            <div class="mt-6">
+                <a href="{% url 'register_choose_role' %}" class="inline-block bg-white text-blue-700 font-bold py-2 px-4 rounded hover:bg-gray-200">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-12">
+        <a href="{% url 'about' %}" class="text-2xl text-teal-500 hover:text-teal-700">Learn more about us</a>
+    </div>
+</div>
+{% endblock %}

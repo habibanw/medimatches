@@ -1,0 +1,13 @@
+
+{% block title %}Invalid 404 Page{% endblock %}
+
+{% block content %}
+<div>
+    <h2>404 Page</h2>
+    {% for message in messages %}
+<div class="{{ message.tags }} p-2 bg-green-100 border border-green-400 text-green-700">
+    {{ message }}
+</div>
+{% endfor %}
+</div>
+{% endblock %}
